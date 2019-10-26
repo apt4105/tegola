@@ -12,6 +12,7 @@ import (
 	"github.com/go-spatial/geom/slippy"
 	"github.com/go-spatial/tegola"
 	"github.com/go-spatial/tegola/cache"
+	"github.com/go-spatial/tegola/provider"
 )
 
 var (
@@ -72,6 +73,8 @@ type Atlas struct {
 	maps map[string]Map
 	// holds a reference to the cache backend
 	cacher cache.Interface
+	// consumers
+	consumers map[string]provider.Consumer
 }
 
 // AllMaps returns a slice of all maps contained in the Atlas so far.

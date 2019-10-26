@@ -29,6 +29,7 @@ type Config struct {
 	Cache        env.Dict  `toml:"cache"`
 	// Map of providers.
 	Providers []env.Dict
+	Consumers []env.Dict
 	Maps      []Map
 }
 
@@ -49,6 +50,7 @@ type Map struct {
 	Center      [3]env.Float `toml:"center"`
 	Layers      []MapLayer   `toml:"layers"`
 	TileBuffer  *env.Int     `toml:"tile_buffer"`
+	Consumers   []env.String `toml:"consumers"`
 }
 
 type MapLayer struct {

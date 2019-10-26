@@ -56,12 +56,18 @@ func (e ErrDefaultTagsInvalid) Error() string {
 }
 
 // Maps registers maps with with atlas
-func Maps(a *atlas.Atlas, maps []config.Map, providers map[string]provider.Tiler) error {
+func Maps(a *atlas.Atlas, maps []config.Map, providers map[string]provider.Tiler, consumers map[string]provider.Consumer) error {
 
 	// iterate our maps
 	for _, m := range maps {
 		newMap := atlas.NewWebMercatorMap(string(m.Name))
 		newMap.Attribution = html.EscapeString(string(m.Attribution))
+
+		newMap.Consumers = map[string]provider.Consumer{}
+		for _, ve := range m.Consumers {
+			v := string(ve)
+			newMap.Consumers[v] = consumers[v]
+		}
 
 		// convert from env package
 		centerArr := [3]float64{}

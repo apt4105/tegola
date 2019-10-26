@@ -78,8 +78,18 @@ func initConfig(configFile string, cacheRequired bool) (err error) {
 		return fmt.Errorf("could not register providers: %v", err)
 	}
 
+	consArr := make([]dict.Dicter, len(conf.Providers))
+	for i := range consArr {
+		consArr[i] = conf.Consumers[i]
+	}
+
+	consumers, err := register.Consumers(consArr)
+	if err != nil {
+		return fmt.Errorf("could not register consumers: %v", err)
+	}
+
 	// init our maps
-	if err = register.Maps(nil, conf.Maps, providers); err != nil {
+	if err = register.Maps(nil, conf.Maps, providers, consumers); err != nil {
 		return fmt.Errorf("could not register maps: %v", err)
 	}
 	if len(conf.Cache) == 0 && cacheRequired {

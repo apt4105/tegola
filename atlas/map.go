@@ -61,6 +61,8 @@ type Map struct {
 	// MVT output values
 	TileExtent uint64
 	TileBuffer uint64
+	// consumers
+	Consumers map[string]provider.Consumer
 }
 
 // AddDebugLayers returns a copy of a Map with the debug layers appended to the layer list
