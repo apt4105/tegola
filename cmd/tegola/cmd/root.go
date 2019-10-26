@@ -78,7 +78,7 @@ func initConfig(configFile string, cacheRequired bool) (err error) {
 		return fmt.Errorf("could not register providers: %v", err)
 	}
 
-	consArr := make([]dict.Dicter, len(conf.Providers))
+	consArr := make([]dict.Dicter, len(conf.Consumers))
 	for i := range consArr {
 		consArr[i] = conf.Consumers[i]
 	}

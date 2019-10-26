@@ -69,7 +69,6 @@ func NewConsumer(config dict.Dicter) (provider.Consumer, error) {
 		Password: password,
 		LogLevel: pgx.LogLevelWarn,
 		RuntimeParams: map[string]string{
-			"default_transaction_read_only": "TRUE",
 			"application_name":              "tegola",
 		},
 	}
@@ -225,11 +224,13 @@ func (cons *Consumer) InsertFeatures(ctx context.Context, layerName string, feat
 
 		sql := wr.String()
 
-		rows, err := cons.pool.Query(sql)
+		log.Println(sql)
+
+		tag, err := cons.pool.Exec(sql)
+		log.Println(tag, err)
 		if err != nil {
 			return err
 		}
-		rows.Close()
 	}
 
 	return nil
