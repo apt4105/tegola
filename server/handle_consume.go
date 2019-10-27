@@ -24,8 +24,11 @@ func (HandleConsumers) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		panic("unrechable")
 	}
 
-	arr := strings.Split(r.URL.Path, "/")
-	if len(arr) != 5 {
+	name := strings.TrimPrefix(r.URL.Path, URIPrefix)
+	log.Println("url: ", name)
+
+	arr := strings.Split(name, "/")
+	if len(arr) != 4 {
 		http.Error(w,
 			"path must be /map_name/consumer_name",
 			http.StatusBadRequest)
@@ -42,7 +45,7 @@ func (HandleConsumers) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	m, err := atlas.GetMap(arr[2])
+	m, err := atlas.GetMap(arr[1])
 	if err != nil {
 		log.Println(err)
 		http.Error(w,
@@ -51,7 +54,7 @@ func (HandleConsumers) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cons, ok := m.Consumers[arr[3]]
+	cons, ok := m.Consumers[arr[2]]
 	if !ok {
 		http.Error(w,
 			"consumer not found",
@@ -75,7 +78,7 @@ func (HandleConsumers) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	err = cons.InsertFeatures(ctx, arr[4], []provider.Feature{pfeature})
+	err = cons.InsertFeatures(ctx, arr[3], []provider.Feature{pfeature})
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "could not insert feature", http.StatusInternalServerError)
